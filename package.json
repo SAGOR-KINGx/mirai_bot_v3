@@ -1,8 +1,8 @@
 {
-		"name": "priyansh-bot-v2",
+		"name": "sagor-bot-v2",
 		"version": "10.1.1",
-		"description": "A simple Facebook Messenger Bot made by 𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭.",
-		"main": "Priyansh.js",
+		"description": "A simple Facebook Messenger Bot made by Sagor.",
+		"main": "Sagor.js",
 		"engines": {
 				"node": "20.x",
 				"npm": "10.0.0"
@@ -14,24 +14,24 @@
 		},
 		"repository": {
 				"type": "git",
-				"url": "https://github.com/Priyansh-11/Priyansh-bot/issues"
+				"url": "https://github.com/Uzi-SaGor-01/xox/issues"
 		},
 		"keywords": [
 				"bot",
 				"facebook",
-				"projectpriyansh",
+				"projectsagor",
 				"messenger",
 				"javasvript",
 				"sagor",
 				"princesagor",
 				"mental"
 		],
-		"author": "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
+		"author": "JAHIDUL ISLAM SAGOR",
 		"license": "GPL-3.0",
 		"bugs": {
-				"url": "https://github.com/Priyansh-11/Priyansh-bot/issues"
+				"url": "https://github.com/Uzi-SaGor-01/xox/issues"
 		},
-		"homepage": "https://github.com/Priyansh-11/Priyansh-bot/issues",
+		"homepage": "https://github.com/Uzi-SaGor-01/xox/issues",
 		"dependencies": {
 				"axios": "^1.7.2",
 				"body-parser": "^1.20.0",
@@ -64,7 +64,6 @@
 				"pidusage": "^3.0.0",
 				"ping-monitor": "^0.6.2",
 				"priyansh-all-dl": "latest",
-				"priyanshu-fca": "latest",
 				"readline": "^1.3.0",
 				"request": "^2.88.2",
 				"sequelize": "^6.21.4",
