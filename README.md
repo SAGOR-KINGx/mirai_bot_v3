@@ -1,6 +1,6 @@
-# Priyansh-Bot-V2
+# Sagor-Bot-V2
 
-**Priyansh-Bot-V2** is a Facebook Messenger chatbot that runs with the help of your **Facebook account's appstate (cookies)**. This bot listens to your messages in Messenger and handles multiple useful commands.
+**Sagor-Bot-V2** is a Facebook Messenger chatbot that runs with the help of your **Facebook account's appstate (cookies)**. This bot listens to your messages in Messenger and handles multiple useful commands.
 
 ##
 
@@ -19,8 +19,8 @@
 ### 1. Repository Clone Karein
 
 ```bash
-git clone https://github.com/codedbypriyansh/Priyansh-Bot-V2.git
-cd Priyansh-Bot-V2
+git clone https://github.com/Uzi-SaGor-01/xox.git
+cd Sagor-Bot-V2
 ```
 
 ### 2. Dependencies Installed
@@ -65,10 +65,10 @@ node index.js
 - You can use any one
 
 ```
-fca-priyansh
+sagor-z-fca 
 ```
 ```
-priyanshu-fca
+sagor-vex-fca
 ```
 ---
 
@@ -82,4 +82,4 @@ priyanshu-fca
 
 ## 👨‍💻 Author
 
-Developed with ❤️ by [Priyansh Rajput](https://github.com/codedbypriyansh)
+Developed with ❤️ by [SaGor](https://github.com/Uzi-SaGor-01)
