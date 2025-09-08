@@ -311,6 +311,7 @@ function onBot({ models: botModel }) {
         botData.models = models
         onBot(botData);
     } catch (error) { logger(global.getText('sagor', 'successConnectDatabase', JSON.stringify(error)), '[ DATABASE ]'); }
+    console.log(chalk.bold.hex("#eff1f0").bold("============ SUCCESFULLY ==============\n░█▀▀▀█ ─█▀▀█ ░█▀▀█ ░█▀▀▀█ ░█▀▀█ ─▀▀▀▄▄ ░█▄▄█ ░█─▄▄ ░█──░█ ░█▄▄▀ ░█▄▄▄█ ░█─░█ ░█▄▄█ ░█▄▄▄█ ░█─░█"));
 })();
 
 process.on('unhandledRejection', (err, p) => {});
