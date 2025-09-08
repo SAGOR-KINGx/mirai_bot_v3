@@ -1,26 +1,29 @@
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
-const fsExtra = require("fs-extra");
 
 module.exports.config = {
     name: "bin",
-    version: "1.0.0",
+    version: "4.0.0",
     hasPermssion: 0,
     credits: "Sagor",
-    description: "Fetch CMD raw content from Pastebin",
+    description: "Fetch CMD raw content from Pastebin as text (Unlimited, split automatically)",
     commandCategory: "owner",
     usages: "bin <cmd_name>",
     cooldowns: 3,
 };
 
 module.exports.run = async function({ api, event, args }) {
-    if (!args[0]) return api.sendMessage("❌ Please provide CMD name\nExample: bin sms", event.threadID, event.messageID);
+    const { threadID, messageID } = event;
+
+    if (!args[0]) 
+        return api.sendMessage("❌ Please provide CMD name\nExample: bin sms", threadID, messageID);
 
     const cmdName = args[0].toLowerCase();
-    const cmdPath = path.join(__dirname, "..", "cmds", cmdName + ".js");
+    const cmdPath = path.join(__dirname, "..", "cmds", `${cmdName}.js`);
 
-    if (!fs.existsSync(cmdPath)) return api.sendMessage(`❌ CMD not found: ${cmdName}`, event.threadID, event.messageID);
+    if (!fs.existsSync(cmdPath)) 
+        return api.sendMessage(`❌ CMD not found: ${cmdName}`, threadID, messageID);
 
     const pastebinApiUrl = `https://sagor-z-pastebin.vercel.app/raw/${cmdName}`;
 
@@ -30,21 +33,28 @@ module.exports.run = async function({ api, event, args }) {
 
         if (typeof data === "object") data = JSON.stringify(data, null, 2);
 
-        if (data.length > 1900) {
-            const filePath = path.join(__dirname, "cache", `${cmdName}.txt`);
-            await fsExtra.writeFile(filePath, data, "utf8");
+        // Messenger message limit safeguard
+        const chunkSize = 1800;
+        let chunks = [];
+        for (let i = 0; i < data.length; i += chunkSize) {
+            chunks.push(data.slice(i, i + chunkSize));
+        }
 
-            await api.sendMessage({
-                body: `📄 CMD "${cmdName}" is too long. Sending as file.`,
-                attachment: fsExtra.createReadStream(filePath)
-            }, event.threadID, event.messageID);
+        // Text response with code block formatting
+        for (let i = 0; i < chunks.length; i++) {
+            const responseText = 
+`📄 CMD Name: ${cmdName}
+🔢 Part: ${i + 1}/${chunks.length}
+💻 Preview:
+\`\`\`js
+${chunks[i]}
+\`\`\``;
 
-            fsExtra.unlinkSync(filePath);
-        } else {
-            await api.sendMessage(`📄 CMD "${cmdName}":\n\n${data}`, event.threadID, event.messageID);
+            await api.sendMessage(responseText, threadID);
         }
 
     } catch (err) {
-        return api.sendMessage("⚠️ Error fetching data from Pastebin!", event.threadID, event.messageID);
+        console.error(err);
+        return api.sendMessage("⚠️ Error fetching data from Pastebin!", threadID, messageID);
     }
 };
