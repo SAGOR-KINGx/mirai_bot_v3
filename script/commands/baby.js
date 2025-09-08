@@ -1,5 +1,5 @@
 const axios = require("axios");
-const apiUrl = "https://nix-baby.vercel.app";
+const apiUrl = "https://nix-baby-apis.vercel.app";
 
 module.exports.config = {
   name: "baby",
@@ -172,4 +172,5 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
   } catch (err) {
     return api.sendMessage(`❌ | Error in handleEvent: ${err.message}`, event.threadID, event.messageID);
   }
+
 };
