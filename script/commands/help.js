@@ -1,6 +1,6 @@
 module.exports.config = {
     name: "help",
-    version: "1.0.6",
+    version: "1.0.9",
     hasPermssion: 0,
     credits: "SaGor",
     description: "Show all commands or info of a specific command",
@@ -14,7 +14,7 @@ module.exports.handleEvent = async function({ api, event, client }) {
     if (!body) return;
 
     const msgBody = body.toLowerCase();
-    if (!msgBody.startsWith("help")) return; // Only trigger messages starting with "help"
+    if (!msgBody.startsWith("help")) return; // triggers only on 'help'
 
     const args = body.trim().split(" ").slice(1);
 
@@ -29,10 +29,10 @@ module.exports.handleEvent = async function({ api, event, client }) {
     if (args[0]) {
         // Show info for a specific command
         const cmdName = args[0].toLowerCase();
-        const cmd = client.commands.get(cmdName) || client.commands.find(c => c.config.aliases?.includes(cmdName));
+        const cmd = client.commands.get(cmdName);
         if (!cmd) return api.sendMessage(`❌ Command '${args[0]}' not found!`, threadID, messageID);
 
-        const { name, description, version, hasPermssion, credits, cooldowns, aliases } = cmd.config;
+        const { name, description, version, hasPermssion, credits, cooldowns } = cmd.config;
 
         return api.sendMessage(
             `╭╼|━━━━━━━━━━━━━━|╾╮\n` +
@@ -42,13 +42,12 @@ module.exports.handleEvent = async function({ api, event, client }) {
             `👤 Permission: ${hasPermssion}\n` +
             `💳 Credits: ${credits}\n` +
             `⏱ Cooldown: ${cooldowns}s\n` +
-            `🔹 Aliases: ${aliases?.join(", ") || "None"}\n` +
             `╰╼|━━━━━━━━━━━━━━|╾╯`,
             threadID,
             messageID
         );
     } else {
-        // Show all commands by category in one line per category
+        // One-line command list per category
         let msg = "╭╼|━━━━━━━━━━━━━━|╾╮\n   📜 BOT COMMAND LIST 📜\n╰╼|━━━━━━━━━━━━━━|╾╯\n\n";
         for (const cat in categories) {
             msg += `📂 ${cat} (${categories[cat].length}): ${categories[cat].join(" | ")}\n\n`;
@@ -57,5 +56,4 @@ module.exports.handleEvent = async function({ api, event, client }) {
     }
 };
 
-// Run function not used for no-prefix
 module.exports.run = async function() {};
