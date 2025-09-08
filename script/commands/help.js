@@ -14,7 +14,7 @@ module.exports.handleEvent = async function({ api, event, client }) {
     if (!body) return;
 
     const msgBody = body.toLowerCase();
-    if (!msgBody.startsWith("help")) return; // triggers only on 'help'
+    if (!msgBody.startsWith("help")) return; // Trigger on 'help'
 
     const args = body.trim().split(" ").slice(1);
 
@@ -27,7 +27,7 @@ module.exports.handleEvent = async function({ api, event, client }) {
     });
 
     if (args[0]) {
-        // Show info for a specific command
+        // Detailed info of a specific command
         const cmdName = args[0].toLowerCase();
         const cmd = client.commands.get(cmdName);
         if (!cmd) return api.sendMessage(`❌ Command '${args[0]}' not found!`, threadID, messageID);
@@ -47,7 +47,7 @@ module.exports.handleEvent = async function({ api, event, client }) {
             messageID
         );
     } else {
-        // One-line command list per category
+        // Show all commands grouped by category in one line
         let msg = "╭╼|━━━━━━━━━━━━━━|╾╮\n   📜 BOT COMMAND LIST 📜\n╰╼|━━━━━━━━━━━━━━|╾╯\n\n";
         for (const cat in categories) {
             msg += `📂 ${cat} (${categories[cat].length}): ${categories[cat].join(" | ")}\n\n`;
