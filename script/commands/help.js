@@ -1,6 +1,6 @@
 module.exports.config = {
     name: "help",
-    version: "1.0.3",
+    version: "1.0.5",
     hasPermssion: 0,
     credits: "SaGor",
     description: "Show all commands or info of a specific command",
@@ -13,10 +13,11 @@ module.exports.handleEvent = async function({ api, event, client }) {
     const { threadID, messageID, body } = event;
     if (!body) return;
 
-    const trigger = body.toLowerCase();
-    if (!trigger.startsWith("help")) return;
+    const msgBody = body.toLowerCase();
+    if (!msgBody.startsWith("help")) return;
 
-    const args = body.split(" ").slice(1);
+    const args = body.trim().split(" ").slice(1);
+
     const categories = {};
     client.commands.forEach(cmd => {
         const cat = cmd.config.commandCategory || "Others";
@@ -24,10 +25,13 @@ module.exports.handleEvent = async function({ api, event, client }) {
         categories[cat].push(cmd.config.name);
     });
 
-    if(args[0]) {
-        const cmd = client.commands.get(args[0].toLowerCase());
-        if(!cmd) return api.sendMessage(`❌ Command '${args[0]}' not found!`, threadID, messageID);
+    if (args[0]) {
+        const cmdName = args[0].toLowerCase();
+        const cmd = client.commands.get(cmdName) || client.commands.find(c => c.config.aliases?.includes(cmdName));
+        if (!cmd) return api.sendMessage(`❌ Command '${args[0]}' not found!`, threadID, messageID);
+
         const { name, description, version, hasPermssion, credits, cooldowns, aliases } = cmd.config;
+
         return api.sendMessage(
             `╭╼|━━━━━━━━━━━━━━|╾╮\n` +
             `📌 Name: ${name}\n` +
@@ -42,11 +46,10 @@ module.exports.handleEvent = async function({ api, event, client }) {
             messageID
         );
     } else {
+        // One-line command list per category
         let msg = "╭╼|━━━━━━━━━━━━━━|╾╮\n   📜 BOT COMMAND LIST 📜\n╰╼|━━━━━━━━━━━━━━|╾╯\n\n";
-        for(const cat in categories) {
-            msg += `╭─📂 ${cat} (${categories[cat].length})\n`;
-            msg += `│ ${categories[cat].join(" | ")}\n`;
-            msg += `╰──────────────\n\n`;
+        for (const cat in categories) {
+            msg += `📂 ${cat} (${categories[cat].length}): ${categories[cat].join(" | ")}\n\n`;
         }
         return api.sendMessage(msg, threadID, messageID);
     }
