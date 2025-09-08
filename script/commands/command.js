@@ -1,192 +1,89 @@
+const f = require("fs-extra");
+const p = require("path");
+const a = require("axios");
+
 module.exports.config = {
-    name: "cmd",
-    version: "1.0.0",
-    hasPermssion: 2,
-    credits: "Priyansh Rajput",
-    description: "Manage/Control all bot modules",
-    commandCategory: "System",
-    usages: "[load/unload/loadAll/unloadAll/info] [name module]",
-    cooldowns: 2,
-    dependencies: {
-        "fs-extra": "",
-        "child_process": "",
-        "path": ""
-    }
+  name: "cmd",
+  version: "0.0.1",
+  hasPermssion: 2,
+  credits: "ArYAN",
+  description: "install, load, unload, loadall",
+  commandCategory: "system",
+  usages: "cmd {p}",
+  cooldowns: 3
 };
 
-const loadCommand = function ({ moduleList, threadID, messageID }) {
+module.exports.run = async function ({ api, event, args }) {
+  const { threadID: t, messageID: m } = event;
+  const d = p.join(__dirname);
 
-    const { execSync } = global.nodemodule['child_process'];
-    const { writeFileSync, unlinkSync, readFileSync } = global.nodemodule['fs-extra'];
-    const { join } = global.nodemodule['path'];
-    const { configPath, mainPath, api } = global.client;
-    const logger = require(mainPath + '/utils/log');
+  if (args[0] === "install") {
+    if (!args[1]) return api.sendMessage("⚠️ | Please enter the file name to save (with .js extension)", t, m);
+    if (!args[2]) return api.sendMessage("⚠️ | Please enter the url or code of the command file you want to install", t, m);
+    const n = args[1];
+    const fp = p.join(d, n);
+    try {
+      let c;
+      if (args[2].startsWith("http")) {
+        const r = await a.get(args[2]);
+        c = r.data;
+      } else {
+        c = args.slice(2).join(" ");
+      }
+      await f.writeFile(fp, c, "utf8");
+      return api.sendMessage(`✅ | Installed command "${n}" successfully\nSaved at: ${fp}`, t, m);
+    } catch (e) {
+      return api.sendMessage(`❌ | Failed to install command "${n}"\n${e.name}: ${e.message}`, t, m);
+    }
+  }
 
-    var errorList = [];
-    delete require['resolve'][require['resolve'](configPath)];
-    var configValue = require(configPath);
-    writeFileSync(configPath + '.temp', JSON.stringify(configValue, null, 2), 'utf8');
-    for (const nameModule of moduleList) {
+  if (args[0] === "load") {
+    if (!args[1]) return api.sendMessage("⚠️ | Please enter the command name you want to load", t, m);
+    const n = args[1];
+    const fp = p.join(d, n);
+    if (!f.existsSync(fp)) return api.sendMessage(`⚠️ | Command file "${n}" not found`, t, m);
+    try {
+      delete require.cache[require.resolve(fp)];
+      global.client.commands.set(n.replace(".js", ""), require(fp));
+      return api.sendMessage(`✅ | Loaded command "${n}" successfully`, t, m);
+    } catch (e) {
+      return api.sendMessage(`❌ | Failed to load command "${n}"\n${e.name}: ${e.message}`, t, m);
+    }
+  }
+
+  if (args[0] === "unload") {
+    if (!args[1]) return api.sendMessage("⚠️ | Please enter the command name you want to unload", t, m);
+    const n = args[1];
+    const fp = p.join(d, n);
+    if (!f.existsSync(fp)) return api.sendMessage(`⚠️ | Command file "${n}" not found`, t, m);
+    try {
+      delete require.cache[require.resolve(fp)];
+      global.client.commands.delete(n.replace(".js", ""));
+      return api.sendMessage(`✅ | Unloaded command "${n}" successfully`, t, m);
+    } catch (e) {
+      return api.sendMessage(`❌ | Failed to unload command "${n}"\n${e.name}: ${e.message}`, t, m);
+    }
+  }
+
+  if (args[0] === "loadall") {
+    try {
+      const files = f.readdirSync(d).filter(x => x.endsWith(".js") && x !== "cmd.js");
+      let s = 0, fl = 0;
+      for (const x of files) {
+        const fp = p.join(d, x);
         try {
-            const dirModule = __dirname + '/' + nameModule + '.js';
-            delete require['cache'][require['resolve'](dirModule)];
-            const command = require(dirModule);
-            global.client.commands.delete(nameModule);
-            if (!command.config || !command.run || !command.config.commandCategory) 
-                throw new Error('[ 饾棖饾棤饾棗 ] - Module is not properly formatted!');
-            global.client['eventRegistered'] = global.client['eventRegistered']['filter'](info => info != command.config.name);
-            if (command.config.dependencies && typeof command.config.dependencies == 'object') {
-                const listPackage = JSON.parse(readFileSync('./package.json')).dependencies,
-                    listbuiltinModules = require('module')['builtinModules'];
-                for (const packageName in command.config.dependencies) {
-                    var tryLoadCount = 0,
-                        loadSuccess = ![],
-                        error;
-                    const moduleDir = join(global.client.mainPath, 'nodemodules', 'node_modules', packageName);
-                    try {
-                        if (listPackage.hasOwnProperty(packageName) || listbuiltinModules.includes(packageName)) global.nodemodule[packageName] = require(packageName);
-                        else global.nodemodule[packageName] = require(moduleDir);
-                    } catch {
-                        logger.loader('[ 饾棖饾棤饾棗 ] - Package not found ' + packageName + ' Support for commands ' + command.config.name+ 'proceed with the installation...', 'warn');
-                        const insPack = {};
-                        insPack.stdio = 'inherit';
-                        insPack.env = process.env ;
-                        insPack.shell = !![];
-                        insPack.cwd = join(global.client.mainPath,'nodemodules')
-                        execSync('npm --package-lock false --save install ' + packageName + (command.config.dependencies[packageName] == '*' || command.config.dependencies[packageName] == '' ? '' : '@' + command.config.dependencies[packageName]), insPack);
-                        for (tryLoadCount = 1; tryLoadCount <= 3; tryLoadCount++) {
-                            require['cache'] = {};
-                            try {
-                                if (listPackage.hasOwnProperty(packageName) || listbuiltinModules.includes(packageName)) global.nodemodule[packageName] = require(packageName);
-                                else global.nodemodule[packageName] = require(moduleDir);
-                                loadSuccess = !![];
-                                break;
-                            } catch (erorr) {
-                                error = erorr;
-                            }
-                            if (loadSuccess || !error) break;
-                        }
-                        if (!loadSuccess || error) throw 'Unable to download package ' + packageName + (' for commands ') + command.config.name +', fault: ' + error + ' ' + error['stack'];
-                    }
-                }
-                logger.loader('[ 饾棖饾棤饾棗 ] -  Successfully loaded the entire package for the command' + command.config.name);
-            }
-            if (command.config.envConfig && typeof command.config.envConfig == 'Object') try {
-                for (const [key, value] of Object['entries'](command.config.envConfig)) {
-                    if (typeof global.configModule[command.config.name] == undefined) 
-                        global.configModule[command.config.name] = {};
-                    if (typeof configValue[command.config.name] == undefined) 
-                        configValue[command.config.name] = {};
-                    if (typeof configValue[command.config.name][key] !== undefined) 
-                        global.configModule[command.config.name][key] = configValue[command.config.name][key];
-                    else global.configModule[command.config.name][key] = value || '';
-                    if (typeof configValue[command.config.name][key] == undefined) 
-                        configValue[command.config.name][key] = value || '';
-                }
-                logger.loader('Loaded config' + ' ' + command.config.name);
-            } catch (error) {
-                throw new Error('[ 饾棖饾棤饾棗 ] 禄 Could not load config module, error: ' + JSON.stringify(error));
-            }
-            if (command['onLoad']) try {
-                const onLoads = {};
-                onLoads['configValue'] = configValue;
-                command['onLoad'](onLoads);
-            } catch (error) {
-                throw new Error('[ 饾棖饾棤饾棗 ] 禄 Unable to onLoad module, error: ' + JSON.stringify(error), 'error');
-            }
-            if (command.handleEvent) global.client.eventRegistered.push(command.config.name);
-            (global.config.commandDisabled.includes(nameModule + '.js') || configValue.commandDisabled.includes(nameModule + '.js')) 
-            && (configValue.commandDisabled.splice(configValue.commandDisabled.indexOf(nameModule + '.js'), 1),
-            global.config.commandDisabled.splice(global.config.commandDisabled.indexOf(nameModule + '.js'), 1))
-            global.client.commands.set(command.config.name, command)
-            logger.loader('Loaded command ' + command.config.name + '!');
-        } catch (error) {
-            errorList.push('- ' + nameModule + ' reason:' + error + ' at ' + error['stack']);
-        };
+          delete require.cache[require.resolve(fp)];
+          global.client.commands.set(x.replace(".js", ""), require(fp));
+          s++;
+        } catch {
+          fl++;
+        }
+      }
+      return api.sendMessage(`✅ | Loaded ${s} commands successfully\n❌ | Failed: ${fl}`, t, m);
+    } catch (e) {
+      return api.sendMessage(`❌ | Failed to load all commands\n${e.name}: ${e.message}`, t, m);
     }
-    if (errorList.length != 0) api.sendMessage('[ 饾棖饾棤饾棗 ] 禄 Commands that have just crashed when the system loads: ' + errorList.join(' '), threadID, messageID);
-    api.sendMessage('[ 饾棖饾棤饾棗 ] 禄 The Priyansh Bot system has just loaded successfully ' + (moduleList.length - errorList.length) +' command 鈾伙笍\n鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹乗n[ 饾棢饾椉饾棶饾棻饾棽饾棻 ] 禄 饾椇饾椉饾棻饾槀饾椆饾棽饾榾 ('+moduleList.join(', ') + '.js) 馃挀', threadID, messageID) 
-    writeFileSync(configPath, JSON.stringify(configValue, null, 4), 'utf8')
-    unlinkSync(configPath + '.temp');
-    return;
-}
+  }
 
-const unloadModule = function ({ moduleList, threadID, messageID }) {
-    const { writeFileSync, unlinkSync } = global.nodemodule["fs-extra"];
-    const { configPath, mainPath, api } = global.client;
-    const logger = require(mainPath + "/utils/log").loader;
-
-    delete require.cache[require.resolve(configPath)];
-    var configValue = require(configPath);
-    writeFileSync(configPath + ".temp", JSON.stringify(configValue, null, 4), 'utf8');
-
-    for (const nameModule of moduleList) {
-        global.client.commands.delete(nameModule);
-        global.client.eventRegistered = global.client.eventRegistered.filter(item => item !== nameModule);
-        configValue["commandDisabled"].push(`${nameModule}.js`);
-        global.config["commandDisabled"].push(`${nameModule}.js`);
-        logger(`Unloaded command ${nameModule}!`);
-    }
-
-    writeFileSync(configPath, JSON.stringify(configValue, null, 4), 'utf8');
-    unlinkSync(configPath + ".temp");
-
-    return api.sendMessage(`[ 饾棖饾棤饾棗 ] 禄 Successfully canceled ${moduleList.length} command 鉁╜, threadID, messageID);
-}
-
-module.exports.run = function ({ event, args, api }) {
-  
-    if (event.senderID != 61579792988640) return api.sendMessage(`[ 饾棖饾棤饾棗 ] 禄 What the are you using 馃槒`, event.threadID, event.messageID)
-    
-    const { readdirSync } = global.nodemodule["fs-extra"];
-    const { threadID, messageID } = event;
-
-    var moduleList = args.splice(1, args.length);
-
-    switch (args[0]) {
-      case "count": {
-      let commands = client.commands.values();
-		  let infoCommand = "";
-			api.sendMessage("[ 饾棖饾棤饾棗 ] - Currently includes " + client.commands.size + " Usable commands 馃拰"+ infoCommand, event.threadID, event.messageID);
-      break;
-		}
-        case "load": {
-            if (moduleList.length == 0) return api.sendMessage("[ 饾棖饾棤饾棗 ] 禄 Module name does not allow blank 鈿狅笍", threadID, messageID);
-            else return loadCommand({ moduleList, threadID, messageID });
-        }
-        case "unload": {
-            if (moduleList.length == 0) return api.sendMessage("[ 饾棖饾棤饾棗 ] 禄 Module name does not allow blank 鈿狅笍", threadID, messageID);
-            else return unloadModule({ moduleList, threadID, messageID });
-        }
-        case "loadAll": {
-            moduleList = readdirSync(__dirname).filter((file) => file.endsWith(".js") && !file.includes('example'));
-            moduleList = moduleList.map(item => item.replace(/\.js/g, ""));
-            return loadCommand({ moduleList, threadID, messageID });
-        }
-        case "unloadAll": {
-            moduleList = readdirSync(__dirname).filter((file) => file.endsWith(".js") && !file.includes('example') && !file.includes("command"));
-            moduleList = moduleList.map(item => item.replace(/\.js/g, ""));
-            return unloadModule({ moduleList, threadID, messageID });
-        }
-        case "info": {
-            const command = global.client.commands.get(moduleList.join("") || "");
-
-            if (!command) return api.sendMessage("[ 饾棖饾棤饾棗 ] 禄 The module you imported does not exist 鈿狅笍", threadID, messageID);
-
-            const { name, version, hasPermssion, credits, cooldowns, dependencies } = command.config;
-
-            return api.sendMessage(
-                "====== " + name.toUpperCase() + " ======\n" +
-                "- Commands created by: " + credits + "\n" +
-                "- Version: " + version + "\n" +
-                "- Request permissions: " + ((hasPermssion == 0) ? "User" : (hasPermssion == 1) ? "Admin" : "饾棪饾槀饾椊饾椊饾椉饾椏饾榿" ) + "\n" +
-                "- Standby time: " + cooldowns + " seconds(s)\n" +
-                `- Required packages: ${Object.keys(dependencies).join(", ") || "Without"}`,
-                threadID, messageID
-            );
-        }
-        default: {
-            return global.utils.throwError(this.config.name, threadID, messageID);
-        }
-    }
-            }
+  return api.sendMessage("⚠️ | Invalid usage. Use: cmd [install/load/unload/loadall]", t, m);
+};
