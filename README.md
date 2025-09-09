@@ -2,6 +2,37 @@
 
 **Sagor-Bot-V2** is a Facebook Messenger chatbot that runs with the help of your **Facebook account's appstate (cookies)**. This bot listens to your messages in Messenger and handles multiple useful commands.
 
+# BOT RUNNING WORKFLOWS
+```
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm start
+```
+
 ##
 
 - Facebook Messenger chatbot functionality
