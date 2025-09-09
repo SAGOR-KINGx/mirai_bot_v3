@@ -50,8 +50,8 @@ jobs:
 ### 1. Repository Clone Karein
 
 ```bash
-git clone https://github.com/Uzi-SaGor-01/xox.git
-cd Sagor-Bot-V2
+git clone https://github.com/SAGO_KINGx/mirai_bot_v3.git
+cd mirai_Bot_v3
 ```
 
 ### 2. Dependencies Installed
