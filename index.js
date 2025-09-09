@@ -92,7 +92,7 @@ try {
     logger(packageInfo.description, "[ DESCRIPTION ]");
     
     // Try to check for updates, but don't stop the bot if it fails
-    axios.get("https://raw.githubusercontent.com/Uzi-SaGor-01/xox/main/package.json")
+    axios.get("https://raw.githubusercontent.com/SAGOR-KINGx/mirai_bot_v3/main/package.json")
         .then((res) => {
             // Only log if successful, don't stop the bot if there's an error
             if (res.data && res.data.version) {
