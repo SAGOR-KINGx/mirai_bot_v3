@@ -1,7 +1,7 @@
 module.exports.config = {
   name: "tagall",
   version: "1.0.9",
-  hasPermssion: 2,
+  hasPermssion: 0,
   credits: "SaGor",
   description: "Mentions all group members one by one with optional text",
   commandCategory: "group",
