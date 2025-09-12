@@ -294,9 +294,31 @@ function onBot({ models: botModel }) {
             return //process.exit(0);
         };
         if (!global.checkBan) logger(global.getText('sagor', 'warningSourceCode'), '[ GLOBAL BAN ]');
+            global.client.api = loginApiData
+                logger(`
+▒█▀▀▀█ ░█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ 
+░▀▀▀▄▄ ▒█▄▄█ ▒█░▄▄ ▒█░░▒█ ▒█▄▄▀ 
+▒█▄▄▄█ ▒█░▒█ ▒█▄▄█ ▒█▄▄▄█ ▒█░▒█`, '[ RinCute ]');
     });
 }
 
+const chalk = require('chalk');
+
+// ASCII logo
+const logo = [
+  '▒█▀▀▀█ ▀▀█▀▀ ░█▀▀█ ▒█▀▀█ ▀▀█▀▀',
+  '░▀▀▀▄▄ ░▒█░░ ▒█▄▄█ ▒█▄▄▀ ░▒█░░',
+  '▒█▄▄▄█ ░▒█░░ ▒█░▒█ ▒█░▒█ ░▒█░░'
+];
+
+// Rainbow colors
+const colors = [chalk.red, chalk.yellow, chalk.green, chalk.cyan, chalk.magenta];
+
+// Print each line with rainbow color
+logo.forEach((line, index) => {
+  const color = colors[index % colors.length];
+  console.log(color(line));
+});
 //========= Connecting to Database =========//
 
 (async () => {
