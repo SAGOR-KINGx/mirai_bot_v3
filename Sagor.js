@@ -329,7 +329,7 @@ logo.forEach((line, index) => {
         botData.models = models
         onBot(botData);
     } catch (error) { logger(global.getText('sagor', 'successConnectDatabase', JSON.stringify(error)), '[ DATABASE ]'); }
-    console.log(chalk.bold.hex("#eff1f0").bold("============ SUCCESFULLY ==============\n░█▀▀▀█ ─█▀▀█ ░█▀▀█ ░█▀▀▀█ ░█▀▀█ ─▀▀▀▄▄ ░█▄▄█ ░█─▄▄ ░█──░█ ░█▄▄▀ ░█▄▄▄█ ░█─░█ ░█▄▄█ ░█▄▄▄█ ░█─░█"));
+    console.log(chalk.bold.hex("#eff1f0").bold("============ SUCCESFULLY =============="));
 })();
 
 process.on('unhandledRejection', (err, p) => {});
