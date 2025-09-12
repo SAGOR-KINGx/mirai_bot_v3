@@ -2,9 +2,9 @@ module.exports.config = {
     name: "console",
     version: "1.0.0",
     hasPermssion: 3,
-    credits: "???",//Mod by H.Thanh
+    credits: "SaGor",
     description: "",
-    commandCategory: "Hệ thống",
+    commandCategory: "System",
     usages: "",
     cooldowns: 0
 };
@@ -12,21 +12,21 @@ module.exports.handleEvent = async function ({ api, args, Users, event, Threads,
     let { messageID, threadID, senderID, mentions } = event;
     const chalk = require('chalk');
      const moment = require("moment-timezone");
-var time= moment.tz("Asia/Kolkata").format("LLLL");   
+var time= moment.tz("Asia/Dhaka").format("LLLL");   
   const thread = global.data.threadData.get(event.threadID) || {};
   if (typeof thread["console"] !== "undefined" && thread["console"] == true) return;
   if (event.senderID == global.data.botID) return;
   var nameBox = global.data.threadInfo.get(event.threadID).threadName || "Name does not exist";
   var nameUser = await Users.getNameUser(event.senderID)
     var msg = event.body||"Photos, videos or special characters";
-    var job = ["FF9900", "FFFF33", "33FFFF", "FF99FF", "FF3366", "FFFF66", "FF00FF", "66FF99", "00CCFF", "FF0099", "FF0066"];
+    var job = ["FF9900", "FFFF33", "33FFFF", "FF99FF", "FF3366", "FFFF66", "FF00FF", "66FF99", "00CCFF", "FF0099", "FF0066","008E97","F58220","38B6FF","7ED957"];
     var random = 
 job[Math.floor(Math.random() * job.length)]      
     var random1 = job[Math.floor(Math.random() * job.length)]
    var random2 = job[Math.floor(Math.random() * job.length)]
-  var random3 = job[Math.floor(Math.random() * job.length)]
-    console.log(chalk.hex("#" + random)(`GROUP NAME: ${nameBox}`) + " | " + chalk.hex("#" + random1)(`USER NAME: ${nameUser}`) + " | " + chalk.hex("#" + random2)(`CONTENT: ${msg}`) + `\n` + chalk.hex("#" + random3)(`[ ${time} ]`) + `\n` + chalk.white(`|------[ SAGOR-PROJECT ]------|`)); 
+var random4 = job[Math.floor(Math.random() * job.length)]
+    console.log(chalk.hex("#" + random)(`𝐁𝐨𝐱: ${nameBox}`) + " | " + chalk.hex("#" + random1)(`\n𝐍𝐚𝐦𝐞: ${nameUser}`) + " | " + chalk.hex("#" + random2)(`\n𝐓𝐞𝐱𝐭: ${msg}`) + `\n` + chalk.hex("#" + random4)(`[🌸] ──────────SAGOR────────── [🌸]`)); 
 }
 module.exports.run = async function ({ api, args, Users, event, Threads, utils, client }) {
   
-}
+               }
