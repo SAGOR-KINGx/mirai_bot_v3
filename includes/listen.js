@@ -6,12 +6,12 @@ module.exports = function ({ api, models }) {
     const logger = require("../utils/log.js");
     const moment = require('moment-timezone');
     const axios = require("axios");
-    var day = moment.tz("Asia/Kolkata").day();
+    var day = moment.tz("Asia/Dhaka").day();
 
 
     const checkttDataPath = __dirname + '/../script/commands/checktuongtac/';
     setInterval(async () => {
-        const day_now = moment.tz("Asia/Kolkata").day();
+        const day_now = moment.tz("Asia/Dhaka").day();
         const _ADMINIDs = [...global.config.NDH, ...global.config.ADMINBOT];
       try {
         if (day != day_now) {
@@ -142,11 +142,23 @@ module.exports = function ({ api, models }) {
     }());
     logger(`[ ${global.config.PREFIX} ] • ${(!global.config.BOTNAME) ? "" : global.config.BOTNAME}`, "[ SAGOR ]");
     
-global.client.api = loginApiData
-                logger(`
-▒█▀▀▀█ ░█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ 
-░▀▀▀▄▄ ▒█▄▄█ ▒█░▄▄ ▒█░░▒█ ▒█▄▄▀ 
-▒█▄▄▄█ ▒█░▒█ ▒█▄▄█ ▒█▄▄▄█ ▒█░▒█`, '[ RinCute ]');
+const chalk = require('chalk');
+
+// ASCII logo
+const logo = [
+  '▒█▀▀▀█ ▀▀█▀▀ ░█▀▀█ ▒█▀▀█ ▀▀█▀▀',
+  '░▀▀▀▄▄ ░▒█░░ ▒█▄▄█ ▒█▄▄▀ ░▒█░░',
+  '▒█▄▄▄█ ░▒█░░ ▒█░▒█ ▒█░▒█ ░▒█░░'
+];
+
+// Rainbow colors
+const colors = [chalk.red, chalk.yellow, chalk.green, chalk.cyan, chalk.magenta];
+
+// Print each line with rainbow color
+logo.forEach((line, index) => {
+  const color = colors[index % colors.length];
+  console.log(color(line));
+});
     ///////////////////////////////////////////////
     //========= Require all handle need =========//
     //////////////////////////////////////////////
