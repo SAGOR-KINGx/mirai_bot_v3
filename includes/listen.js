@@ -103,7 +103,7 @@ module.exports = function ({ api, models }) {
     (async function () {
 
         try {
-            logger(global.getText('listen', 'startLoadEnvironment'), '[ SAGOR ]');
+            logger(global.getText('listen', 'startLoadEnvironment'), '[✨💫 SAGOR 💫✨]');
             let threads = await Threads.getAll(),
                 users = await Users.getAll(['userID', 'name', 'data']),
                 currencies = await Currencies.getAll(['userID']);
@@ -140,7 +140,7 @@ module.exports = function ({ api, models }) {
             return logger.loader(global.getText('listen', 'failLoadEnvironment', error), 'error');
         }
     }());
-    logger(`[ ${global.config.PREFIX} ] • ${(!global.config.BOTNAME) ? "" : global.config.BOTNAME}`, "[ SAGOR ]");
+    logger(`[ ${global.config.PREFIX} ] • ${(!global.config.BOTNAME) ? "" : global.config.BOTNAME}`, "[✨💫 SAGOR 💫✨]");
     
 const chalk = require('chalk');
 
