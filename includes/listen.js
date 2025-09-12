@@ -141,7 +141,12 @@ module.exports = function ({ api, models }) {
         }
     }());
     logger(`[ ${global.config.PREFIX} ] • ${(!global.config.BOTNAME) ? "" : global.config.BOTNAME}`, "[ SAGOR ]");
-
+    
+global.client.api = loginApiData
+                logger(`
+▒█▀▀▀█ ░█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ 
+░▀▀▀▄▄ ▒█▄▄█ ▒█░▄▄ ▒█░░▒█ ▒█▄▄▀ 
+▒█▄▄▄█ ▒█░▒█ ▒█▄▄█ ▒█▄▄▄█ ▒█░▒█`, '[ RinCute ]');
     ///////////////////////////////////////////////
     //========= Require all handle need =========//
     //////////////////////////////////////////////
