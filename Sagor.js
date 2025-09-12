@@ -21,23 +21,23 @@ global.client = new Object({
   getTime: function (option) {
         switch (option) {
             case "seconds":
-                return `${moment.tz("Asia/Kolkata").format("ss")}`;
+                return `${moment.tz("Asia/Dhaka").format("ss")}`;
             case "minutes":
-                return `${moment.tz("Asia/Kolkata").format("mm")}`;
+                return `${moment.tz("Asia/Dhaka").format("mm")}`;
             case "hours":
-                return `${moment.tz("Asia/Kolkata").format("HH")}`;
+                return `${moment.tz("Asia/Dhaka").format("HH")}`;
             case "date": 
-                return `${moment.tz("Asia/Kolkata").format("DD")}`;
+                return `${moment.tz("Asia/Dhaka").format("DD")}`;
             case "month":
-                return `${moment.tz("Asia/Kolkata").format("MM")}`;
+                return `${moment.tz("Asia/Dhaka").format("MM")}`;
             case "year":
-                return `${moment.tz("Asia/Kolkata").format("YYYY")}`;
+                return `${moment.tz("Asia/Dhaka").format("YYYY")}`;
             case "fullHour":
-                return `${moment.tz("Asia/Kolkata").format("HH:mm:ss")}`;
+                return `${moment.tz("Asia/Dhaka").format("HH:mm:ss")}`;
             case "fullYear":
-                return `${moment.tz("Asia/Kolkata").format("DD/MM/YYYY")}`;
+                return `${moment.tz("Asia/Dhaka").format("DD/MM/YYYY")}`;
             case "fullTime":
-                return `${moment.tz("Asia/Kolkata").format("HH:mm:ss DD/MM/YYYY")}`;
+                return `${moment.tz("Asia/Dhaka").format("HH:mm:ss DD/MM/YYYY")}`;
         }
   }
 });
@@ -294,11 +294,7 @@ function onBot({ models: botModel }) {
             return //process.exit(0);
         };
         if (!global.checkBan) logger(global.getText('sagor', 'warningSourceCode'), '[ GLOBAL BAN ]');
-            global.client.api = loginApiData
-                logger(`
-▒█▀▀▀█ ░█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ 
-░▀▀▀▄▄ ▒█▄▄█ ▒█░▄▄ ▒█░░▒█ ▒█▄▄▀ 
-▒█▄▄▄█ ▒█░▒█ ▒█▄▄█ ▒█▄▄▄█ ▒█░▒█`, '[ RinCute ]');
+            
     });
 }
 
